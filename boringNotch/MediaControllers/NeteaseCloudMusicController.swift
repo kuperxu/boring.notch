@@ -108,29 +108,27 @@ class NeteaseCloudMusicController: MediaControllerProtocol {
 
     func togglePlay() async {
         if !isActive() {
-            openMusicApp()
+            await executeCommand("activate")
         }
         MRMediaRemoteSendCommandFunction(2, nil)
     }
-    
-    func openMusicApp() {
+
+    func openMusicApp() async {
         let bundleID = playbackState.bundleIdentifier
 
         let workspace = NSWorkspace.shared
-        if let appURL = workspace.urlForApplication(withBundleIdentifier: bundleID) {
-            let configuration = NSWorkspace.OpenConfiguration()
-            workspace.openApplication(at: appURL, configuration: configuration) { (app, error) in
-                if let error = error {
-                    print("Failed to launch app with bundle ID: \(bundleID), error: \(error)")
-                } else {
-                    print("Launched app with bundle ID: \(bundleID)")
-                }
-            }
-        } else {
+        guard let appURL = workspace.urlForApplication(withBundleIdentifier: bundleID) else {
             print("Failed to find app with bundle ID: \(bundleID)")
+            return
+        }
+        let configuration = NSWorkspace.OpenConfiguration()
+        do {
+            let _ = try await workspace.openApplication(at: appURL, configuration: configuration)
+            print("Launched app with bundle ID: \(bundleID)")
+        } catch {
+            print("Failed to launch app with bundle ID: \(bundleID), error: \(error)")
         }
     }
-
 
     func nextTrack() async {
         MRMediaRemoteSendCommandFunction(4, nil)
