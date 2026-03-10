@@ -130,6 +130,8 @@ extension MediaControllerType {
             return "Connects directly to the Apple Music app."
         case .youtubeMusic:
             return "Requires a third-party client with API plugin enabled."
+        case .neteaseMusic:
+            return "Connects to NetEase Cloud Music (网易云音乐) via system Now Playing."
         }
     }
 }

@@ -131,6 +131,8 @@ class MusicManager: ObservableObject {
             newController = SpotifyController()
         case .youtubeMusic:
             newController = YouTubeMusicController()
+        case .neteaseMusic:
+            newController = NeteaseCloudMusicController()
         }
 
         // Set up state observation for the new controller
