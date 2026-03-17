@@ -10,6 +10,10 @@ import Combine
 import Foundation
 
 final class NowPlayingController: ObservableObject, MediaControllerProtocol {
+    func openMusicApp() async {
+        
+    }
+    
     func updatePlaybackInfo() async {
         await fetchFavoriteStateIfSupported()
     }

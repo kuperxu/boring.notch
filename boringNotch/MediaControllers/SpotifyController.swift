@@ -83,7 +83,23 @@ class SpotifyController: MediaControllerProtocol {
     func toggleRepeat() async {
         await executeAndRefresh("set repeating to not repeating")
     }
-    
+
+    func openMusicApp() async {
+        let bundleID = playbackState.bundleIdentifier
+        let workspace = NSWorkspace.shared
+        guard let appURL = workspace.urlForApplication(withBundleIdentifier: bundleID) else {
+            print("Failed to find app with bundle ID: \(bundleID)")
+            return
+        }
+        let configuration = NSWorkspace.OpenConfiguration()
+        do {
+            let _ = try await workspace.openApplication(at: appURL, configuration: configuration)
+            print("Launched app with bundle ID: \(bundleID)")
+        } catch {
+            print("Failed to launch app with bundle ID: \(bundleID), error: \(error)")
+        }
+    }
+
     func setVolume(_ level: Double) async {
         let clampedLevel = max(0.0, min(1.0, level))
         let volumePercentage = Int(clampedLevel * 100)

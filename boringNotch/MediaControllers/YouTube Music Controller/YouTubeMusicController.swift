@@ -97,6 +97,22 @@ final class YouTubeMusicController: MediaControllerProtocol {
     func toggleShuffle() async { await sendCommand(endpoint: "/shuffle", method: "POST") }
     func toggleRepeat() async { await sendCommand(endpoint: "/switch-repeat", method: "POST") }
 
+    func openMusicApp() async {
+        let bundleID = configuration.bundleIdentifier
+        let workspace = NSWorkspace.shared
+        guard let appURL = workspace.urlForApplication(withBundleIdentifier: bundleID) else {
+            print("Failed to find app with bundle ID: \(bundleID)")
+            return
+        }
+        let configuration = NSWorkspace.OpenConfiguration()
+        do {
+            let _ = try await workspace.openApplication(at: appURL, configuration: configuration)
+            print("Launched app with bundle ID: \(bundleID)")
+        } catch {
+            print("Failed to launch app with bundle ID: \(bundleID), error: \(error)")
+        }
+    }
+
     nonisolated func isActive() -> Bool {
         NSWorkspace.shared.runningApplications.contains {
             $0.bundleIdentifier == configuration.bundleIdentifier

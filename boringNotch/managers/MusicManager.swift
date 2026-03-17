@@ -661,6 +661,13 @@ class MusicManager: ObservableObject {
         }
     }
     func openMusicApp() {
+        if let controller = activeController {
+            Task {
+                await controller.openMusicApp()
+            }
+            return
+        }
+
         guard let bundleID = bundleIdentifier else {
             print("Error: appBundleIdentifier is nil")
             return

@@ -103,6 +103,10 @@ struct AlbumArtView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 30, height: 30)
                 .offset(x: 10, y: 10)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    musicManager.openMusicApp()
+                }
                 .transition(.scale.combined(with: .opacity))
                 .zIndex(2)
         }
